@@ -1,12 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.floxtor.esasysplitbill" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>Easy Split Bill</name>
+<widget id="com.floxtor.killbillsplitter" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Kill Bill Splitter</name>
     <description>
-        A blank PhoneGap app.
+        Kill Bill Splitter
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="aquarotorres@gmail.com" href="http://phonegap.com">
+        Alvaro Torres F.
     </author>
     <content src="index.html" />
+    <icon src="icons/bill.png" width="57" height="57" density="mdpi" />
     <access origin="*" />
 </widget>
