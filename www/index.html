@@ -52,10 +52,14 @@
                 width: 35px;
             }
             #input_product {
-
+                padding-left: 4px;
             }
             #input_valor {
                 width: 70px;
+                padding-right: 4px;
+            }
+            #input_person {
+                padding-left: 4px;
             }
 
             .text-right {
@@ -117,7 +121,7 @@
                 <tr v-for="product in products" style="border: 1px solid #DFDFDF;">
                     <td>
                         <button type="button" class="button" @click="deleteProduct(product.id)">
-                            <img src="icons/Trash.png" width="28" alt="">
+                            <img src="icons/delete.png" width="28" alt="">
                         </button>
                     </td>
                     <td>{{ product.name }}</td>
@@ -152,7 +156,7 @@
         <table>
             <tr>
                 <td><input class="input" type="text" size="16" maxlength="16"
-                    ref="person_name" placeholder="Name"
+                    ref="person_name" placeholder="Name" id="input_person"
                     v-model="person_name" v-on:keyup.13="addPerson(person_name)"></td>
                 <td width="100%">
                     <button class="button" class="text-center" v-on:click="addPerson(person_name)"
@@ -169,7 +173,7 @@
             <tr v-for="person in persons"  style="border: 1px solid #DFDFDF;">
                 <td>
                     <button type="button" class="button" @click="deletePerson(person.id)">
-                        <img src="icons/Trash.png" width="28" alt="">
+                        <img src="icons/delete.png" width="28" alt="">
                     </button>
                 </td>
                 <td>
@@ -198,7 +202,7 @@
 
         <br>
         <center>
-            <img src="icons/aquaro.png" alt="Aquaro">
+            <img src="icons/aquaro.png" alt="Aquaro" width="120">
         </center>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
