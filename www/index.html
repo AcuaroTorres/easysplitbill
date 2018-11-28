@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-        <title>Easy Split Bill</title>
+        <title>Kill Split Bill</title>
         <style media="screen">
             body {
                 background-color: #126BBF;
@@ -12,7 +12,11 @@
 
             h2 {
                 color: #ffffff; font-family: 'Raleway',sans-serif;
-                font-size: 30px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase; }
+                font-size: 28px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;
+                padding: 0px;
+                margin: 0px;
+                text-shadow: 2px 2px black;
+            }
             #peoples {
                 border: 1px solid #ccc;
             }
@@ -45,13 +49,13 @@
                 background-color: white;
             }
             #input_ct {
-
+                width: 35px;
             }
             #input_product {
 
             }
             #input_valor {
-
+                width: 70px;
             }
 
             .text-right {
@@ -71,11 +75,6 @@
                  width:100%;
                  border-collapse: collapse;
             }
-            h2{
-                padding: 0px;
-                margin: 0px;
-                text-shadow: 2px 2px black;
-            }
         </style>
 
     </head>
@@ -87,23 +86,25 @@
         <table>
             <tr>
                 <td>
-                    <input class="input text-right" id="input_ct" type="number"
-                        v-model="cantidad" placeholder="Qt" min="1" max="16"
+                    <input class="input text-center" id="input_ct" type="number"
+                        v-model="product_qt" placeholder="Qt"
+                        onKeyUp="if(this.value>19){this.value='19';}else if(this.value<0){this.value='0';}"
                         v-on:keyup.13="setFocusProduct" ref="qty">
                 </td>
                 <td>
                     <input class="input" id="input_product" type="text"
-                        v-model="product" placeholder="Product" size="16"
-                        maxlength="16" ref="product"
+                        v-model="product_name" placeholder="Product" size="16"
+                        maxlength="16" ref="product_name"
                         v-on:keyup.13="setFocusValue">
                 </td>
-                <td><input class="input text-right" id="input_valor" ref="value"
-                    type="number" v-model="valor" placeholder="$" min="0" max="999999"
-                    v-on:keyup.13="addProduct"></td>
+                <td><input class="input text-right" id="input_valor" ref="product_value"
+                    type="number" v-model="product_value" placeholder="$" min="0" max="999999"
+                    v-on:keyup.13="addProduct(product_qt,product_name,product_value)"></td>
                 <td>
                     <button type="button" class="button" name="button"
-                        v-on:click="addProduct" ref="addProduct">
-                        <img src="icons/add.png" width="25" alt="">
+                        v-on:click="addProduct(product_qt,product_name,product_value)"
+                        ref="addProduct">
+                        <img src="icons/add.png" width="28" alt="">
                     </button>
                 </td>
             </tr>
@@ -113,20 +114,21 @@
 
         <table class="table">
             <tbody>
-                <tr v-for="(product,indexProduct) in products" style="border: 1px solid #DFDFDF;">
+                <tr v-for="product in products" style="border: 1px solid #DFDFDF;">
                     <td>
-                        <button type="button" class="button" @click="deleteProduct(indexProduct)">
-                            <img src="icons/Trash.png" width="25" alt="">
+                        <button type="button" class="button" @click="deleteProduct(product.id)">
+                            <img src="icons/Trash.png" width="28" alt="">
                         </button>
                     </td>
-                    <td>{{ product.product }}</td>
+                    <td>{{ product.name }}</td>
                     <td>
-                        <li v-for="(person,indexPerson) in persons">
-                            <input type="checkbox" :id="person"
-                             v-model="persons[indexPerson].products" @change="handleChange()" :value="indexProduct">{{ person.name }}
+                        <li v-for="(person,index) in persons">
+                            <input type="checkbox" :id="person" @change="handleChange()"
+                             v-model="persons[index].products" :value="product.id">
+                             {{ person.name }}
                         </li>
                     </td>
-                    <td class="text-right"> {{ parseInt(product.valor).toLocaleString() }}</td>
+                    <td class="text-right"> {{ parseInt(product.value).toLocaleString() }}</td>
                 </tr>
 
                 <tfooter>
@@ -149,13 +151,13 @@
 
         <table>
             <tr>
-                <td><img src="icons/contact.png" width="30" alt=""></td>
                 <td><input class="input" type="text" size="16" maxlength="16"
-                    v-model="person" v-on:keyup.13="addPerson"></td>
+                    ref="person_name" placeholder="Name"
+                    v-model="person_name" v-on:keyup.13="addPerson(person_name)"></td>
                 <td width="100%">
-                    <button class="button" class="text-center" v-on:click="addPerson"
+                    <button class="button" class="text-center" v-on:click="addPerson(person_name)"
                         ref="addPerson">
-                        <img src="icons/add.png" width="20" alt="">
+                        <img src="icons/add_person.png" width="30" alt="">
                     </button>
                 </td>
             </tr>
@@ -164,20 +166,24 @@
         <br>
 
         <table class="table">
-            <tr v-for="(person,index) in persons"  style="border: 1px solid #DFDFDF;">
+            <tr v-for="person in persons"  style="border: 1px solid #DFDFDF;">
                 <td>
-                    <button type="button" class="button" @click="deletePerson(index)">
-                        <img src="icons/Trash.png" width="25" alt="">
+                    <button type="button" class="button" @click="deletePerson(person.id)">
+                        <img src="icons/Trash.png" width="28" alt="">
                     </button>
                 </td>
                 <td>
                     {{ person.name }}
                 </td>
                 <td class="text-right">
-                    <table style="margin-right: 0;margin-left: auto;">
+                    <table style="margin: auto; margin-right: 0px;">
                         <tr v-for="product in person.products">
-                            <td class="text-left"> <li> {{ products[product].product}}</li></td>
-                            <td class="text-right">{{ Math.ceil(products[product].valor / products[product].division).toLocaleString() }}</li></td>
+                            <td class="text-left">
+                                {{ products.find(p => p.id === product).name }}
+                            </td>
+                            <td class="text-right">
+                                {{ Math.ceil(products.find(p => p.id === product).value / products.find(p => p.id === product).division).toLocaleString() }}
+                            </td>
                         </tr>
                     </table>
                     <strong class="text-right" style="margin: 3px;">
@@ -190,8 +196,6 @@
             </tr>
         </table>
 
-<pre>{{$data}}</pre>
-
         <br>
         <center>
             <img src="icons/aquaro.png" alt="Aquaro">
@@ -200,112 +204,124 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script src="js/vue.min.js"></script>
         <script type="text/javascript">
-            var app = new Vue({
-                el: '#app',
-                data: {
-                    products: [
-                        {'key':0, 'product':'Pitcher','valor':'12000','division':0},
-                        {'key':1, 'product':'Pizza','valor':'8000','division':0},
-                        {'key':2, 'product':'Mojito','valor':'8000','division':0}
-                    ],
-                    person: '',
-                    product: '',
-                    cantidad: 1,
-                    valor: '',
-                    subtotal: 0,
-                    propina: 0,
-                    total: 0,
-                    persons: [
-                        {
-                            "name": "Alvaro",
-                            "products": [],
-                            "subtotal": 0,
-                        },
-                        {
-                            "name": "Daniela",
-                            "products": [],
-                            "subtotal": 0,
-                        },
-                        {
-                            "name": "Angelina",
-                            "products": [],
-                            "subtotal": 0,
-                        },
-                    ]
+        var app = new Vue({
+            el: "#app",
+            data: {
+                products: [
+                  // { id: 0, name: "Pizza", value: 9000, division: 0 },
+                  // { id: 1, name: "Pitcher", value: 6000, division: 0 },
+                  // { id: 2, name: "Mojito", value: 2000, division: 0 }
+                ],
+                persons: [
+                  // { id: 0, name: "Alvaro", products: [0,1], subtotal: 0 },
+                  // { id: 1, name: "Carolina", products: [0,2], subtotal: 0 },
+                  // { id: 2, name: "Jorge", products: [0,1], subtotal: 0 }
+                ],
+                subtotal: 0,
+                propina: 0,
+                total: 0,
+                person_name: "",
+                product_qt: 1,
+                product_name: "",
+                product_value: null,
+            },
+            methods: {
+                calcDivision: function() {
+                    for (i = 0; i < this.products.length; i++) {
+                        this.products[i].division = 0;
+                    }
+                    for (i = 0; i < this.persons.length; i++) {
+                        for (j = 0; j < this.persons[i].products.length; j++) {
+                            const p = this.products.find(product => product.id === this.persons[i].products[j]);
+                            p.division += 1;
+                        }
+                    }
                 },
-                created: function () {
+                recalcularTotales: function() {
+                    for (i = 0; i < this.persons.length; i++) {
+                        this.persons[i].subtotal = 0;
+                        for (j = 0; j < this.persons[i].products.length; j++) {
+                            const p = this.products.find(product => product.id === this.persons[i].products[j]);
+                            this.persons[i].subtotal += Math.ceil(p.value / p.division);
+                        }
+                    }
+                },
+                sumProducts: function() {
+                    this.subtotal = 0;
+                    for (i = 0; i < this.products.length; i++) {
+                        this.subtotal = parseInt(this.subtotal) + parseInt(this.products[i].value);
+                    }
+                    this.propina = Math.floor(this.subtotal * 0.1);
+                    this.total   = this.propina + this.subtotal;
+                },
+                addPerson: function(person_name) {
+                    if(this.person_name) {
+                        if(this.persons.length > 0)
+                            var key = this.persons[this.persons.length - 1].id + 1;
+                        else
+                            var key = 0;
+                        this.persons.push({ id: key, name: person_name, products: [], subtotal: 0 });
+                        this.person_name = '';
+                        this.$refs.person_name.focus();
+                    }
+                },
+                deletePerson: function(id) {
+                    this.persons = this.persons.filter(person => person.id !== id);
+                    this.calcDivision();
+                    this.recalcularTotales();
+                },
+                addProduct: function(product_qt, product_name, product_value) {
+                    if(this.product_qt && this.product_name && this.product_value) {
+                        for (i = 0; i < this.product_qt ; i++) {
+                            var valorUnitario = parseInt(this.product_value) / parseInt(this.product_qt);
+                            //this.products.push({'product': this.product, 'valor': valorUnitario})
+                            if(this.products.length > 0)
+                                var key = this.products[this.products.length - 1].id + 1;
+                            else
+                                var key = 0;
+                            this.products.push({
+                                id: key,
+                                name: product_name,
+                                value: valorUnitario,
+                                division: 0
+                            });
+                        }
+                        this.sumProducts();
+                        this.product_qt = 1;
+                        this.product_value = null;
+                        this.product_name = '';
+                        this.$refs.product_name.focus();
+                    }
+                },
+                deleteProduct: function(id) {
+                    this.products = this.products.filter(product => product.id !== id);
+                    // eliminar el producto en el array de personas
+                    for (i = 0; i < this.persons.length; i++) {
+                        this.persons[i].products = this.persons[i].products.filter(product => product !== id);
+                    }
                     this.sumProducts();
-                    //this.$refs.qty.focus();
+                    this.recalcularTotales();
                 },
-                methods: {
-                    addPerson: function() {
-                        if(this.person) {
-                            this.persons.push({"name": this.person, "products": [],"subtotal": 0});
-                            this.person = '';
-                            this.$refs.addPerson.focus();
-                        }
-                    },
-                    addProduct: function() {
-                        if(this.cantidad && this.product && this.valor) {
-                            for (i = 0; i < this.cantidad ; i++) {
-                                var valorUnitario = parseInt(this.valor) / parseInt(this.cantidad);
-                                this.products.push({'product': this.product, 'valor': valorUnitario})
-                            }
-                            this.sumProducts();
-                            this.cantidad = 1;
-                            this.valor = '';
-                            this.product = '';
-                            this.$refs.addProduct.focus();
-                        }
-                    },
-                    deleteProduct: function(index) {
-                        //console.log("no pasa na")
-                        this.$delete(this.products,index);
-                        //this.sumProducts();
-                    },
-                    deletePerson: function(index) {
-                        this.persons.splice(index,1);
-                        this.handleChange();
-                    },
-                    sumProducts: function() {
-                        this.subtotal = 0;
-                        for (i = 0; i < this.products.length; i++){
-                            this.subtotal = parseInt(this.subtotal) + parseInt(this.products[i].valor);
-                        }
-                        this.propina = this.subtotal * 0.1;
-                        this.total   = this.propina + this.subtotal;
-
-                    },
-                    handleChange: function() {
-                        for(i = 0; i < this.products.length; i++) {
-                            this.products[i].division = 0;
-                        }
-                        for(i = 0; i < this.persons.length; i++) {
-                            for(j = 0 ; j < this.persons[i].products.length; j++){
-                                this.products[this.persons[i].products[j]].division +=1;;
-                            }
-                        }
-                        this.recalcularTotales();
-                    },
-                    recalcularTotales: function() {
-                        for(i= 0; i < this.persons.length; i++) {
-                            this.persons[i].subtotal = 0;
-                            for(j=0; j < this.persons[i].products.length; j++){
-                                this.persons[i].subtotal += Math.ceil(this.products[this.persons[i].products[j]].valor / this.products[this.persons[i].products[j]].division);
-                            }
-                        }
-                    },
-                    setFocusProduct: function() {
-                        this.$refs.product.focus();
-                    },
-                    setFocusValue: function() {
-                        this.$refs.value.focus();
-                    },
-                    setFocusAddProduct: function() {
-                        this.$refs.addProduct.focus();
-                    },
-                }
-            })
+                handleChange: function() {
+                    this.calcDivision();
+                    this.recalcularTotales();
+                },
+                setFocusProduct: function() {
+                    this.$refs.product_name.focus();
+                },
+                setFocusValue: function() {
+                    this.$refs.product_value.focus();
+                },
+                setFocusAddProduct: function() {
+                    this.$refs.addProduct.focus();
+                },
+            },
+            created: function() {
+                this.calcDivision();
+                this.sumProducts();
+                this.recalcularTotales();
+            }
+        });
         </script>
     </body>
 </html>
