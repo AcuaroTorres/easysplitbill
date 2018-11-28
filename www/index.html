@@ -12,7 +12,7 @@
 
             h2 {
                 color: #ffffff; font-family: 'Raleway',sans-serif;
-                font-size: 32px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase; }
+                font-size: 30px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase; }
             #peoples {
                 border: 1px solid #ccc;
             }
@@ -174,21 +174,23 @@
                     {{ person.name }}
                 </td>
                 <td class="text-right">
-                    <table>
+                    <table style="margin-right: 0;margin-left: auto;">
                         <tr v-for="product in person.products">
-                            <td class="text-left">{{ products[product].product}}</td>
+                            <td class="text-left"> <li> {{ products[product].product}}</li></td>
                             <td class="text-right">{{ Math.ceil(products[product].valor / products[product].division).toLocaleString() }}</li></td>
                         </tr>
                     </table>
-                    <strong class="text-right">
+                    <strong class="text-right" style="margin: 3px;">
                     {{ person.subtotal.toLocaleString() }} +
                                        {{ Math.ceil(person.subtotal * 0.1).toLocaleString() }} =
                                        {{ Math.ceil(person.subtotal + person.subtotal * 0.1).toLocaleString() }}
                     </strong>
+
                 </td>
             </tr>
         </table>
 
+<pre>{{$data}}</pre>
 
         <br>
         <center>
@@ -202,9 +204,9 @@
                 el: '#app',
                 data: {
                     products: [
-                        // {'key':0, 'product':'Pitcher','valor':'12000','division':0},
-                        // {'key':1, 'product':'Pizza','valor':'8000','division':0},
-                        // {'key':2, 'product':'Mojito','valor':'8000','division':0}
+                        {'key':0, 'product':'Pitcher','valor':'12000','division':0},
+                        {'key':1, 'product':'Pizza','valor':'8000','division':0},
+                        {'key':2, 'product':'Mojito','valor':'8000','division':0}
                     ],
                     person: '',
                     product: '',
@@ -214,21 +216,21 @@
                     propina: 0,
                     total: 0,
                     persons: [
-                        // {
-                        //     "name": "Alvaro",
-                        //     "products": [],
-                        //     "subtotal": 0,
-                        // },
-                        // {
-                        //     "name": "Daniela",
-                        //     "products": [],
-                        //     "subtotal": 0,
-                        // },
-                        // {
-                        //     "name": "Angelina",
-                        //     "products": [],
-                        //     "subtotal": 0,
-                        // },
+                        {
+                            "name": "Alvaro",
+                            "products": [],
+                            "subtotal": 0,
+                        },
+                        {
+                            "name": "Daniela",
+                            "products": [],
+                            "subtotal": 0,
+                        },
+                        {
+                            "name": "Angelina",
+                            "products": [],
+                            "subtotal": 0,
+                        },
                     ]
                 },
                 created: function () {
@@ -257,8 +259,9 @@
                         }
                     },
                     deleteProduct: function(index) {
-                        this.products.splice(index,1);
-                        this.sumProducts();
+                        //console.log("no pasa na")
+                        this.$delete(this.products,index);
+                        //this.sumProducts();
                     },
                     deletePerson: function(index) {
                         this.persons.splice(index,1);
