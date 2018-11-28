@@ -12,7 +12,10 @@
 
             h2 {
                 color: #ffffff; font-family: 'Raleway',sans-serif;
-                font-size: 30px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;
+                font-size: 28px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;
+                padding: 0px;
+                margin: 0px;
+                text-shadow: 2px 2px black;
             }
             #peoples {
                 border: 1px solid #ccc;
@@ -46,7 +49,7 @@
                 background-color: white;
             }
             #input_ct {
-                width: 30px;
+                width: 35px;
             }
             #input_product {
 
@@ -72,11 +75,6 @@
                  width:100%;
                  border-collapse: collapse;
             }
-            h2{
-                padding: 0px;
-                margin: 0px;
-                text-shadow: 2px 2px black;
-            }
         </style>
 
     </head>
@@ -89,7 +87,8 @@
             <tr>
                 <td>
                     <input class="input text-center" id="input_ct" type="number"
-                        v-model="product_qt" placeholder="Qt" min="1" max="16"
+                        v-model="product_qt" placeholder="Qt"
+                        onKeyUp="if(this.value>19){this.value='19';}else if(this.value<0){this.value='0';}"
                         v-on:keyup.13="setFocusProduct" ref="qty">
                 </td>
                 <td>
@@ -105,7 +104,7 @@
                     <button type="button" class="button" name="button"
                         v-on:click="addProduct(product_qt,product_name,product_value)"
                         ref="addProduct">
-                        <img src="icons/add.png" width="25" alt="">
+                        <img src="icons/add.png" width="28" alt="">
                     </button>
                 </td>
             </tr>
@@ -118,14 +117,14 @@
                 <tr v-for="product in products" style="border: 1px solid #DFDFDF;">
                     <td>
                         <button type="button" class="button" @click="deleteProduct(product.id)">
-                            <img src="icons/Trash.png" width="25" alt="">
+                            <img src="icons/Trash.png" width="28" alt="">
                         </button>
                     </td>
                     <td>{{ product.name }}</td>
                     <td>
                         <li v-for="(person,index) in persons">
-                            <input type="checkbox" :id="person"
-                             v-model="persons[index].products" @change="handleChange()" :value="product.id">
+                            <input type="checkbox" :id="person" @change="handleChange()"
+                             v-model="persons[index].products" :value="product.id">
                              {{ person.name }}
                         </li>
                     </td>
@@ -152,13 +151,13 @@
 
         <table>
             <tr>
-                <td><img src="icons/contact.png" width="30" alt=""></td>
-                <td><input class="input" type="text" size="16" maxlength="16" ref="person_name"
+                <td><input class="input" type="text" size="16" maxlength="16"
+                    ref="person_name" placeholder="Name"
                     v-model="person_name" v-on:keyup.13="addPerson(person_name)"></td>
                 <td width="100%">
                     <button class="button" class="text-center" v-on:click="addPerson(person_name)"
                         ref="addPerson">
-                        <img src="icons/add.png" width="20" alt="">
+                        <img src="icons/add_person.png" width="30" alt="">
                     </button>
                 </td>
             </tr>
@@ -170,14 +169,14 @@
             <tr v-for="person in persons"  style="border: 1px solid #DFDFDF;">
                 <td>
                     <button type="button" class="button" @click="deletePerson(person.id)">
-                        <img src="icons/Trash.png" width="25" alt="">
+                        <img src="icons/Trash.png" width="28" alt="">
                     </button>
                 </td>
                 <td>
                     {{ person.name }}
                 </td>
                 <td class="text-right">
-                    <table>
+                    <table style="margin: auto; margin-right: 0px;">
                         <tr v-for="product in person.products">
                             <td class="text-left">
                                 {{ products.find(p => p.id === product).name }}
@@ -187,7 +186,7 @@
                             </td>
                         </tr>
                     </table>
-                    <strong class="text-right">
+                    <strong class="text-right" style="margin: 3px;">
                     {{ person.subtotal.toLocaleString() }} +
                                        {{ Math.ceil(person.subtotal * 0.1).toLocaleString() }} =
                                        {{ Math.ceil(person.subtotal + person.subtotal * 0.1).toLocaleString() }}
@@ -209,14 +208,14 @@
             el: "#app",
             data: {
                 products: [
-                  // { id: 0, name: "Pizza", value: 9000, division: 0 },
-                  // { id: 1, name: "Pitcher", value: 6000, division: 0 },
-                  // { id: 2, name: "Mojito", value: 2000, division: 0 }
+                  { id: 0, name: "Pizza", value: 9000, division: 0 },
+                  { id: 1, name: "Pitcher", value: 6000, division: 0 },
+                  { id: 2, name: "Mojito", value: 2000, division: 0 }
                 ],
                 persons: [
-                  // { id: 0, name: "Alvaro", products: [0,1], subtotal: 0 },
-                  // { id: 1, name: "Carolina", products: [0,2], subtotal: 0 },
-                  // { id: 2, name: "Jorge", products: [0,1], subtotal: 0 }
+                  { id: 0, name: "Alvaro", products: [0,1], subtotal: 0 },
+                  { id: 1, name: "Carolina", products: [0,2], subtotal: 0 },
+                  { id: 2, name: "Jorge", products: [0,1], subtotal: 0 }
                 ],
                 subtotal: 0,
                 propina: 0,
