@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-        <title>Kill Split Bill</title>
+        <title>Cuenta Perfecta</title>
         <style media="screen">
             body {
                 background-color: #126BBF;
@@ -55,7 +55,7 @@
                 padding-left: 4px;
             }
             #input_valor {
-                width: 70px;
+                width: 60px;
                 padding-right: 4px;
             }
             #input_person {
@@ -85,19 +85,19 @@
     <body>
         <div id="app">
 
-        <center><h2>Kill Bill Splitter</h2></center>
+        <center><h2>Cuenta Perfecta</h2></center>
 
-        <table>
+        <table style="margin:auto; margin-right: 0px;">
             <tr>
                 <td>
                     <input class="input text-center" id="input_ct" type="number"
-                        v-model="product_qt" placeholder="Qt"
+                        v-model="product_qt" placeholder="Ct"
                         onKeyUp="if(this.value>19){this.value='19';}else if(this.value<0){this.value='0';}"
                         v-on:keyup.13="setFocusProduct" ref="qty">
                 </td>
                 <td>
                     <input class="input" id="input_product" type="text"
-                        v-model="product_name" placeholder="Product" size="16"
+                        v-model="product_name" placeholder="Producto" size="16"
                         maxlength="16" ref="product_name"
                         v-on:keyup.13="setFocusValue">
                 </td>
@@ -153,12 +153,12 @@
 
         <hr>
 
-        <table>
+        <table style="margin:auto; margin-right: 0px;">
             <tr>
                 <td><input class="input" type="text" size="16" maxlength="16"
-                    ref="person_name" placeholder="Name" id="input_person"
+                    ref="person_name" placeholder="Nombre" id="input_person"
                     v-model="person_name" v-on:keyup.13="addPerson(person_name)"></td>
-                <td width="100%">
+                <td>
                     <button class="button" class="text-center" v-on:click="addPerson(person_name)"
                         ref="addPerson">
                         <img src="icons/add_person.png" width="30" alt="">
@@ -192,8 +192,8 @@
                     </table>
                     <strong class="text-right" style="margin: 3px;">
                     {{ person.subtotal.toLocaleString() }} +
-                                       {{ Math.ceil(person.subtotal * 0.1).toLocaleString() }} =
-                                       {{ Math.ceil(person.subtotal + person.subtotal * 0.1).toLocaleString() }}
+                                       {{ Math.floor(person.subtotal * 0.1).toLocaleString() }} =
+                                       {{ Math.floor(person.subtotal + person.subtotal * 0.1).toLocaleString() }}
                     </strong>
 
                 </td>

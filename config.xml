@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.floxtor.killbillsplitter" version="1.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>Kill Bill Splitter</name>
+<widget id="com.floxtor.perfectbill" version="1.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Cuenta Perfecta</name>
     <description>
-        Kill Bill Splitter
+        Divide la cuenta entre amigos de forma fácil y olvídate de usar la calculadora.
     </description>
-    <author email="alvarotorres@gmail.com" href="http://phonegap.com">
-        Alvaro Torres F.
+    <author email="aquarotorres@gmail.com" href="http://phonegap.com">
+        Aquaro Torres F.
     </author>
     <content src="index.html" />
     <icon src="icon.png" />
